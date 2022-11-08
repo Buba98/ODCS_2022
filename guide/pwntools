@@ -1,0 +1,20 @@
+ssh.process: connect through ssh to shell and run a process r
+
+remote: connect through TCP / UDP to run a process r
+
+process: run a local process r
+
+gdb.attach(r, "String"): attach gdb to process r
+
+input("wait"): put to avoid code going too far without gdb to start
+
+r.recvutil("String"): recive until a String in matched
+
+r.send(Blob): send data to process
+
+r.interactive(): make process interactive through  shell
+
+String.ljust(int size, String): adjust string to the left to reach the size filling it with string
+
+binary = ELF(String path/to/binary): gives you all the info of the binary
+binary.plt["puts"]
