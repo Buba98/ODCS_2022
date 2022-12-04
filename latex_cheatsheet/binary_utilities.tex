@@ -1,0 +1,10 @@
+\begin{keys}{Binary utilities}
+    gcc -fPIC \textsc{filename}.c -o \textsc{filename}.so -shared & compile a shared library from c file\\ \hline
+    ldd \textbf{binary\_file} & print the list of shared libraries that the binary needs\\ \hline
+    \textsc{LD\_PRELOAD}=./\textsc{filename}.so ./\textsc{executable} & preload your custom shared library into the binary and execute it eventually with arguments\\ \hline
+    
+    checksec \textsc{filename} & show mitigations applied to the binary \\ \hline
+    
+    file \textsc{filename} & show information about the file (i.e.: 32/64 bit, dynamically linked etc.) \\ \hline
+    
+\end{keys}
