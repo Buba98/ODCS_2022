@@ -1,0 +1,6 @@
+\begin{keys}{ROP tools}
+    ropper -f \textsc{bin\_file} & show the gadgets of a statically linked binary\\ \hline
+    ropper --nocolor -f \textsc{bin\_file} > \textsc{gadgets.txt} & create a file called \textsc{gadgets.txt} containing the information about the gadgets contained inside \textsc{bin\_file} \\ \hline
+    ropper --nocolor -f \textsc{bin\_file} | grep "\textsc{word1} \textbackslash |\textsc{word12}" & show the gadget of a binary + select the rows which contain \textsc{word1} \underline{and/or} \textsc{word2} \\ \hline
+    ropper --nocolor -f \textsc{bin\_file} | grep "\textsc{word1}" | "\textsc{word2}" & show the gadget of a binary + select the rows which contain \textsc{word1} \underline{and} \textsc{word2} \\ \hline
+\end{keys}
