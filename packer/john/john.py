@@ -1,5 +1,4 @@
 from pwn import *
-
 def main():
     if "REMOTE" not in args:
 
@@ -24,5 +23,6 @@ def main():
     r.send(payload)
 
     r.interactive()
+
 
 main()
