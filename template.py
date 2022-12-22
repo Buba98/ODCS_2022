@@ -5,7 +5,7 @@ def main():
 
         env = {}
 
-        ssh = ssh("buba98", "127.0.0.1", password="Vinsent22!", port=2222)
+        ssh = ssh("acidburn", "127.0.0.1", password="acidburn", port=2222)
         r = ssh.process("sh3llc0d3", env=env)
         gdb.attach(r, """
             # b *0x0804841c
